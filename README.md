@@ -1,7 +1,9 @@
-## Introduction
-This bot has been made to learn Discord.py and it is not useful on a server. 
+# 🤖 Discord Bot
 
-## Prerequisites
+## Introduction
+This bot has been made by me with goal to learning Discord.py, it may not be useful on your Discord server. You are free to use my code in your Discord.py bot without asking me for permission.
+
+## ⚙️ Prerequisites
 You must have following installed on your computer for this bot to work correctly:
 * A **Discord bot token** from Discord Developer Program.
 * **Python 3.10+**
@@ -10,7 +12,7 @@ You must have following installed on your computer for this bot to work correctl
   * `llama-guard3:1b`
 * **Git** for cloning the repository.
 
-## Preparation
+## 💻 Preparation
 NOTE: These commands are for Linux. If you use Windows, please use **Windows Subsystem for Linux** (WSL).
 1. Download all files from this repository with `git clone https://github.com/hakergeniusz/discord-bot.git`.
 2. Open the folder with `cd discord-bot`.
@@ -29,8 +31,8 @@ NOTE: These commands are for Linux. If you use Windows, please use **Windows Sub
 > * `DISCORD_BOT_TOKEN`: Your Discord bot token from Discord Developer Program.
 > * `OWNER_ID`: Your Discord user ID or other account that you want it to have all permissions
 
-## Running the bot
-With `.venv` open, execute the following command: 
+## ▶️ Running the bot
+With your `.venv` active, execute the following command: 
 ```bash
 python3 bot.py
 ```
