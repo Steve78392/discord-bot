@@ -17,5 +17,17 @@ NOTE: These commands are for Linux. If you use Windows, please use **Windows Sub
 3. Create a Python Venv with `python3 -m venv .venv`.
 4. Activate Venv with `source .venv/bin/activate`.
 5. Install all required libraries with `pip install -r requirements.txt`.
-6. Fill `.env`.
+6. Fill up `.env` file.
 
+
+> **Note on `.env` values:**
+> ```
+> DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
+> OWNER_ID=YOUR_DISCORD_ID
+> ```
+> * `DISCORD_BOT_TOKEN`: Your Discord bot token from Discord Developer Program.
+> * `OWNER_ID`: Your Discord user ID or other account that you want it to have all permissions
+
+## Running the bot
+1. Open the virtual environment (venv) with `source .venv/bin/activate`.
+2. Run the `bot.py` with `python3 bot.py`.
