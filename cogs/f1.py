@@ -8,7 +8,7 @@ import asyncio
 
 CURRENT_YEAR = datetime.date.today().year
 
-fastf1.Cache.enable_cache('/home/hakergeniusz/Dokumenty/Python/discord/tmp/f1_cache')
+fastf1.Cache.enable_cache('tmp/f1_cache')
 
 status_map = {
     "Lapped": "Lapped",
