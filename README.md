@@ -1,6 +1,6 @@
 # 🤖 Discord Bot
 
-## Introduction
+## 👋 Introduction
 This bot has been made by me with goal to learning Discord.py, it may not be useful on your Discord server. You are free to use my code in your Discord.py bot without asking me for permission.
 
 ## ⚙️ Prerequisites
@@ -31,7 +31,7 @@ NOTE: These commands are for Linux. If you use Windows, please use **Windows Sub
 > * `DISCORD_BOT_TOKEN`: Your Discord bot token from Discord Developer Program.
 > * `OWNER_ID`: Your Discord user ID or other account that you want it to have all permissions
 
-## ▶️ Running the bot
+## 🟢 Running the bot
 With your `.venv` active, execute the following command: 
 ```bash
 python3 bot.py
