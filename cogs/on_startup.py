@@ -5,7 +5,7 @@ import os
 import asyncio
 
 load_dotenv()
-owner_id = int(os.environ.get('owner_id'))
+owner_id = int(os.environ.get('OWNER_ID'))
 
 class SyncCog(commands.Cog):
     def __init__(self, bot):
