@@ -52,18 +52,18 @@ class Meme(commands.Cog):
 
     @app_commands.command(name="howmanytimes", description="Says how many times was the command typed")
     async def howmanytimes(self, interaction: discord.Interaction):
-        if os.path.exists(f'/home/hakergeniusz/Dokumenty/Python/discord/tmp/howmanytimes/{interaction.user.id}.txt'):
+        if os.path.exists(f'tmp/howmanytimes/{interaction.user.id}.txt'):
             pass
         else:
-            with open(f'/home/hakergeniusz/Dokumenty/Python/discord/tmp/howmanytimes/{interaction.user.id}.txt', 'w') as file:
+            with open(f'tmp/howmanytimes/{interaction.user.id}.txt', 'w') as file:
                 file.write('0')
 
-        with open(f'/home/hakergeniusz/Dokumenty/Python/discord/tmp/howmanytimes/{interaction.user.id}.txt', 'r') as file:
+        with open(f'tmp/howmanytimes/{interaction.user.id}.txt', 'r') as file:
             content = file.read()
             content = int(content)
         content += 1
 
-        with open(f'/home/hakergeniusz/Dokumenty/Python/discord/tmp/howmanytimes/{interaction.user.id}.txt', 'w') as file:
+        with open(f'tmp/howmanytimes/{interaction.user.id}.txt', 'w') as file:
             file.write(str(content))
         if content == 1:
             await interaction.response.send_message(f'You have used this command {content} time.', ephemeral=True)
