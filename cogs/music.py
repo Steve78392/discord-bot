@@ -32,7 +32,7 @@ class Music(commands.Cog):
             await interaction.response.send_message("Already playing audio.")
             print(f"{interaction.user.name} tried to rupture his eardrums, but I already do it. ")
             return
-        music = discord.FFmpegPCMAudio('what.mp3')
+        music = discord.FFmpegPCMAudio('example.mp3')
         vc_chan.play(music)
         await interaction.response.send_message(f"Playing audio on <#{channel1.id}>")
         print(f"Rupturing the eardrums of {interaction.user.name}")
