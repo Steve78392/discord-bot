@@ -54,7 +54,7 @@ class Utility(commands.Cog):
                     if response.status == 404:
                         await interaction.response.send_message("Incorrect avatar URL", ephemeral=True)
                         print(f"{interaction.user.name} thought that {avatar_url} was a URL ")
-                    return
+                        return
         data = {
             "content": message,
             "username": name,
