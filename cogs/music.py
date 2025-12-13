@@ -37,7 +37,6 @@ class Music(commands.Cog):
         await interaction.response.send_message(f"Playing audio on <#{channel1.id}>")
         print(f"Rupturing the eardrums of {interaction.user.name}")
 
-
     @app_commands.command(name="join_vc", description="Joins a voice channel")
     @app_commands.guild_only()
     async def join_vc(self, interaction: discord.Interaction):

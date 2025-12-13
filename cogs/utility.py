@@ -1,41 +1,34 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-import requests
 import asyncio
-from ollama import chat, ChatResponse
+from ollama import AsyncClient
 import os
 from dotenv import load_dotenv
+import aiohttp
 
 load_dotenv()
 owner_id = int(os.environ.get('OWNER_ID'))
 
-def safety_filter(message):
-    response_s: ChatResponse = chat(model='llama-guard3:1b', messages=[
-        {
-            'role': 'user',
-            'content': message,
-        },
-    ])
-    response_s = response_s['message']['content']
-    if response_s == 'safe':
+async def safety_filter(message):
+    message = {
+        'role': 'user',
+        'content': message
+    }
+    response_safety = await AsyncClient().chat(model='llama-guard3:1b', messages=[message])
+    response_safety = response_safety['message']['content']
+    if response_safety == 'safe':
         return True
     else:
         return None
 
-def ai(message):
+async def ai(message):
     if not safety_filter(message):
         return False
-    response: ChatResponse = chat(model='gemma3:270m', messages=[
-        {
-            'role': 'user',
-            'content': message,
-        },
-    ])
-    print(response)
+    response = await AsyncClient().chat(model='gemma3:270m', messages=[message])
     response = response['message']['content']
-    idk = safety_filter(response)
-    if not idk:
+    safety = safety_filter(response)
+    if not safety:
         return None
     return response
 
@@ -53,28 +46,30 @@ class Utility(commands.Cog):
     @app_commands.command(name="webhook", description="Sends a message to a webhook")
     @app_commands.describe(webhook="URL of the webhook", message="Message that you want to send from the webhook", name="The name how webhook will appear", avatar_url="URL of the avatar you want to appear")
     async def webhook(self, interaction: discord.Interaction, webhook: str, message: str, name: str = None, avatar_url: str = None):
-        attempt = requests.post(webhook)
-        if attempt.status_code == 401:
-            await interaction.response.send_message("Invalid webhook URL.", ephemeral=True)
-            print(f"{interaction.user.name} tried to send a message '{message}' to a webhook '{webhook}' but 401")
-        if avatar_url:
-            av_test = requests.post(avatar_url)
-            if av_test == 404:
-                await interaction.response.send_message("Incorrect avatar URL", ephemeral=True)
-                print(f"{interaction.user.name} thought that {avatar_url} was a URL ")
-                avatar_url = None
+        async with aiohttp.ClientSession() as session:
+            async with session.post(webhook) as response:
+                if response.status == 401:
+                    await interaction.response.send_message("Invalid webhook URL.", ephemeral=True)
+                    print(f"{interaction.user.name} tried to send a message '{message}' to a webhook '{webhook}' but 401")
+        async with aiohttp.ClientSession() as session:
+            async with session.post(webhook) as response:
+                if response.status == 404:
+                    await interaction.response.send_message("Incorrect avatar URL", ephemeral=True)
+                    print(f"{interaction.user.name} thought that {avatar_url} was a URL ")
+                    return
         data = {
             "content": message,
             "username": name,
             "avatar_url": avatar_url
         }
-        sent = requests.post(webhook, json = data)
-        if sent.status_code == 429:
-            await interaction.response.send_message("Rate-limit has been hit. Message hasn't been sent.", ephemeral=True)
-            print(f"Failed to send a message to '{webhook}' of contents '{message}' because of rate limit")
-        if sent.status_code == 204:
-            await interaction.response.send_message("Message sent successfully.", ephemeral=True)
-            print(f"Sent '{message}' to webhook '{webhook}'")
+        async with aiohttp.ClientSession() as session:
+            async with session.post(webhook, json=data) as response:
+                if response.status == 429:
+                    await interaction.response.send_message("Rate-limit has been hit. Message hasn't been sent.", ephemeral=True)
+                    print(f"Failed to send a message to '{webhook}' of contents '{message}' because of rate limit")
+                if response.status == 204:
+                    await interaction.response.send_message("Message sent successfully.", ephemeral=True)
+                    print(f"Sent '{message}' to webhook '{webhook}'")
 
     @app_commands.command(name="say", description="Send a message to a channel")
     @app_commands.describe(

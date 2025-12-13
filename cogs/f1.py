@@ -54,8 +54,7 @@ async def did_exist(season, roundnumber):
     if event_row.empty:
         return None
     else:
-        return 'nyjfdhyhutgfjbnfbhurttghj'
-
+        return 'Test'
 
 class F1Commands(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -71,7 +70,7 @@ class F1Commands(commands.Cog):
             await interaction.followup.send(f"There wasn't {roundnumber} round in {season}.")
             return
         session = await asyncio.to_thread(fastf1.get_session, season, roundnumber, 'R')
-        session.load(telemetry=False, weather=False)
+        await asyncio.to_thread(session.load, telemetry=False, weather=False)
         results = session.results
         results1 = results.head(1000)
 

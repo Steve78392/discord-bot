@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 import os
+import aiohttp
 
 load_dotenv()
 owner_id = int(os.environ.get('OWNER_ID'))
@@ -52,8 +53,6 @@ class ownerCommands(commands.Cog):
         await interaction.response.send_message("Shutting down the bot...", ephemeral=True)
         print("Shutting down the bot")
         await self.bot.close()
-        # Why not this?
-        crash = 10 / 0
 
     @admin_check()
     @app_commands.command(name="purge", description="Removes messages in a chat.", )
@@ -102,13 +101,14 @@ class ownerCommands(commands.Cog):
     @app_commands.command(name='delete_webhook', description='Deletes a webhook')
     @app_commands.describe(webhook='Webhook link.')
     async def delete_webhook(self, interaction: discord.Interaction, webhook: str):
-        res = requests.delete(webhook)
-        if res == 404 or res == 401:
-            await interaction.response.send_message('This webhook does not exist. You may have already deleted it.')
-        elif res == 200 or res == 204:
-            await interaction.response.send_message('Removed webhook successfully')
-        else:
-            await interaction.response.send_message(f'Webhook may not have been deleted. Response code is {res}.')
+        async with aiohttp.ClientSession() as session:
+            async with session.delete(webhook) as response:
+                if response.status == 404 or response.status == 401:
+                    await interaction.response.send_message('This webhook does not exist. You may have already deleted it.')
+                elif response.status == 200 or response.status == 204:
+                    await interaction.response.send_message('Removed webhook successfully')
+                else:
+                    await interaction.response.send_message(f'Webhook may not have been deleted. Response code is {response.status}.')
 
 async def setup(bot):
     await bot.add_cog(ownerCommands(bot))
