@@ -23,13 +23,8 @@ async def safety_filter(message):
         return None
 
 async def ai(message):
-    if not safety_filter(message):
-        return False
-    response = await AsyncClient().chat(model='gemma3:270m', messages=[message])
+    response = await AsyncClient().chat(model='gemma3:270m', messages=[{'role': 'user', 'content': message}])
     response = response['message']['content']
-    safety = safety_filter(response)
-    if not safety:
-        return None
     return response
 
 class CogListener(commands.Cog):
@@ -108,7 +103,7 @@ class Utility(commands.Cog):
     async def ai (self, interaction: discord.Interaction, prompt: str):
         await interaction.response.defer()
         print(f'{interaction.user.name} says: {prompt}')
-        response = ai(prompt)
+        response = await ai(prompt)
         if response == None:
             await interaction.response.send_message('AI response did not pass safety systems. Please try again.')
             return
@@ -162,7 +157,7 @@ class Utility(commands.Cog):
     async def on_message(self, message: discord.Message):
         if not message.guild:
             return
-        ai_thingy = safety_filter(message.content)
+        ai_thingy = await safety_filter(message.content)
         if not ai_thingy:
             await message.delete()
             return
