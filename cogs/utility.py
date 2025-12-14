@@ -38,9 +38,10 @@ class Utility(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    # Temporarily removed avatar_url, since error handling was not working.
     @app_commands.command(name="webhook", description="Sends a message to a webhook")
-    @app_commands.describe(webhook="URL of the webhook", message="Message that you want to send from the webhook", name="The name how webhook will appear", avatar_url="URL of the avatar you want to appear")
-    async def webhook(self, interaction: discord.Interaction, webhook: str, message: str, name: str = None, avatar_url: str = None):
+    @app_commands.describe(webhook="URL of the webhook", message="Message that you want to send from the webhook", name="The name how webhook will appear")
+    async def webhook(self, interaction: discord.Interaction, webhook: str, message: str, name: str = None):
         async with aiohttp.ClientSession() as session:
             async with session.get(webhook) as response:
                 if response.status == 401:
@@ -48,17 +49,17 @@ class Utility(commands.Cog):
                     print(f"{interaction.user.name} tried to send a message '{message}' to a webhook '{webhook}' but 401")
                     return
         
-        if avatar_url:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(avatar_url) as response:
-                    if response.status == 404:
-                        await interaction.response.send_message("Incorrect avatar URL", ephemeral=True)
-                        print(f"{interaction.user.name} thought that {avatar_url} was a URL ")
-                        return
+        #if avatar_url:
+        #    async with aiohttp.ClientSession() as session:
+        #        async with session.get(avatar_url) as response:
+        #            if response.status == 404:
+        #                await interaction.response.send_message("Incorrect avatar URL", ephemeral=True)
+        #                print(f"{interaction.user.name} thought that {avatar_url} was a URL ")
+        #                return
         data = {
             "content": message,
             "username": name,
-            "avatar_url": avatar_url
+            #"avatar_url": avatar_url
         }
         async with aiohttp.ClientSession() as session:
             async with session.post(webhook, json=data) as response:
