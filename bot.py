@@ -32,4 +32,7 @@ async def main():
         await load_cogs()
         await bot.start(token)
 
-asyncio.run(main())
+try:
+    asyncio.run(main())
+except KeyboardInterrupt as e:
+    await bot.close()
