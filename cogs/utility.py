@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import aiohttp
 
 load_dotenv()
-owner_id = int(os.environ.get('OWNER_ID'))
+owner_id = int(os.environ['DISCORD_OWNER_ID'])
 
 async def safety_filter(message):
     message = {
