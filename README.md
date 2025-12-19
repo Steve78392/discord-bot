@@ -3,7 +3,7 @@
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
 ## 👋 Introduction
-This bot has been made by me with goal to learning Discord.py, it may not be useful on your Discord server. You are free to use my code in your Discord.py bot without asking me for permission.
+This bot has been made by me with goal to learning Discord.py, it may not be useful on your Discord server.
 
 ## ⚙️ Prerequisites
 You must have following installed on your computer for this bot to work correctly:
