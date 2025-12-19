@@ -9,8 +9,10 @@ You must have following installed on your computer for this bot to work correctl
 * A **Discord bot token** from Discord Developer Program.
 * **Python 3.10+**
 * **Ollama** installed on your system with the following language models:
-  * `gemma3:270m`
-  * `llama-guard3:1b`
+  * `gemma3:1b`
+  * `gemma3:4b`
+  * `qwen2.5-coder:7b`
+> If you don't want to install all of these models, remove `gemma3:4b` and `qwen2.5-coder:7b` from menu selection from `/ai` . These two lines are highlighted with a comment.
 * **Git** for cloning the repository.
 * **FFmpeg** for `/play` command to work correctly.
 * **`example.mp3`** file for the `/play` command to get a file to play. If you don't have one, you can use the default one that is in the repository.
