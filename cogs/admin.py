@@ -1,16 +1,14 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from dotenv import load_dotenv
 import os
 import aiohttp
 
-load_dotenv()
-owner_id = int(os.environ['DISCORD_OWNER_ID'])
+OWNER_ID = int(os.environ['DISCORD_OWNER_ID'])
 
 def admin_check():
     async def predicate(interaction: discord.Interaction) -> bool:
-        if interaction.user.id == owner_id:
+        if interaction.user.id == OWNER_ID:
             return True
         await interaction.response.send_message("You don't have required permissions to do that.", ephemeral=True)
         return False

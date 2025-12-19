@@ -4,11 +4,9 @@ from discord import app_commands
 import asyncio
 from ollama import AsyncClient
 import os
-from dotenv import load_dotenv
 import aiohttp
 
-load_dotenv()
-owner_id = int(os.environ['DISCORD_OWNER_ID'])
+OWNER_ID = int(os.environ['DISCORD_OWNER_ID'])
 HASTEBIN_API_KEY = os.environ['HASTEBIN_API_KEY']
 
 SYSTEM_PROMPT = """
@@ -181,7 +179,7 @@ class Utility(commands.Cog):
     @app_commands.command(name="test", description="Reserved for testing purposes.")
     @app_commands.guild_only()
     async def test(self, interaction: discord.Interaction):
-        if interaction.user.id != owner_id:
+        if interaction.user.id != OWNER_ID:
             await interaction.response.send_message('You are not permitted to do that.')
             return
         await interaction.response.defer()
@@ -205,18 +203,6 @@ class Utility(commands.Cog):
             mes += mes
         mes = 'e' + mes + 'e'
         await interaction.response.send_message(mes)
-
-    # This can lag PC, so I disabled it.
-    #@commands.Cog.listener()
-    #async def on_message(self, message: discord.Message):
-    #    if not message.guild:
-    #        return
-    #    if message.author == self.bot.user:
-    #        return
-    #    ai_thingy = await safety_filter(message.content)
-    #    if not ai_thingy:
-    #        await message.delete()
-    #        return
 
 async def setup(bot):
     await bot.add_cog(Utility(bot))

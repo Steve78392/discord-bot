@@ -1,10 +1,8 @@
-from dotenv import load_dotenv
 import os
 import discord
 from discord.ext import commands
 import asyncio
 
-load_dotenv()
 token = os.environ['DISCORD_BOT_TOKEN']
 
 intents = discord.Intents.default()
