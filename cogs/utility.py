@@ -60,15 +60,6 @@ async def image_checker(session: aiohttp.ClientSession, image_link: str):
     except Exception:
         return None
 
-class CogListener1(commands.Cog):
-    def __init__(self, bot: commands.Bot):
-        self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_message(self, message: discord.Message):
-        print(f'{message.author.name} said: {message.content}')
-
-
 class Utility(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -91,13 +82,11 @@ class Utility(commands.Cog):
                     print(f"{interaction.user.name} thought that {avatar_url} was a URL...")
                     return
 
-        data = {
-            "content": message,
-            "username": name,
-            "avatar_url": avatar_url
-        }
-
-        async with aiohttp.ClientSession() as session:
+            data = {
+                "content": message,
+                "username": name,
+                "avatar_url": avatar_url
+            }
             async with session.post(webhook, json=data) as response:
                 if response.status == 429:
                     await interaction.followup.send("Rate-limit has been hit. Message hasn't been sent.", ephemeral=True)
@@ -159,6 +148,7 @@ class Utility(commands.Cog):
                     await message.edit(content=full_response + '▌')
             else:
                 await message.edit(content='Response is too long to send it on Discord. Soon link for hastebin will be provided.')
+                break
         if len(full_response) <= 1900:
             await message.edit(content=full_response)
             return
@@ -168,6 +158,12 @@ class Utility(commands.Cog):
         }
         async with aiohttp.ClientSession() as session:
             async with session.post("https://hastebin.com/documents", data=full_response, headers=headers) as response:
+                if response.status != 200:
+                    await message.edit(content=f'Failed to upload to Hastebin: Status code: {response.status}.')
+                    return
+                if not 'key' in data:
+                    await message.edit(content='Failed to upload to Hastebin: not recieved the link with response.')
+                    return
                 data = await response.json()
                 await message.edit(content=f'Response is too long to send it on Discord. You can see the response here: <{f"https://hastebin.com/share/{data['key']}"}>.')
 
@@ -204,6 +200,9 @@ class Utility(commands.Cog):
         mes = 'e' + mes + 'e'
         await interaction.response.send_message(mes)
 
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+        print(f'{message.author.name} said: {message.content}')
+
 async def setup(bot):
     await bot.add_cog(Utility(bot))
-    await bot.add_cog(CogListener1(bot))

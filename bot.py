@@ -30,7 +30,8 @@ async def main():
         await load_cogs()
         await bot.start(token)
 
-try:
-    asyncio.run(main())
-except KeyboardInterrupt as e:
-    bot.close()
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print('Shutting down the bot...')

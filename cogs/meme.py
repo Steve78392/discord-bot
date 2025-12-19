@@ -19,7 +19,7 @@ def create_file(id: int):
 def change_file(id: int):
     path = 'tmp/howmanytimes/'
     if not os.path.exists(f'{path}{id}.txt'):
-        asyncio.gather(create_file(id))
+        create_file(id)
     with open(f'{path}{id}.txt', 'r') as f:
         count = int(f.read())
     with open(f'{path}{id}.txt', 'w') as f:
