@@ -1,8 +1,10 @@
 # 🤖 Discord Bot
+<img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/unsupported/risugamis-modloader_vector.svg" height="60">
+
+<img src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge" height="60">
 
 ## 👋 Introduction
-This bot has been made by me with goal to learning Discord.py, it may not be useful on your Discord server. You are free to use my code in your Discord.py bot without asking me for permission.
-
+This bot has been made by me with goal to learning Discord.py, it may not be useful on your Discord server.
 
 ## ⚙️ Prerequisites
 You must have following installed on your computer for this bot to work correctly:
@@ -32,9 +34,11 @@ NOTE: These commands are for Linux. If you use Windows, please use **Windows Sub
 > ```
 > DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
 > DISCORD_OWNER_ID=YOUR_DISCORD_ID
+> HASTEBIN_API_KEY=YOUR_HASTEBIN_TOKEN
 > ```
 > * `DISCORD_BOT_TOKEN`: Your Discord bot token from Discord Developer Program.
 > * `DISCORD_OWNER_ID`: Your Discord user ID or other account that you want it to have all permissions
+> * `HASTEBIN_API_KEY`: Your Hastebin API key obtainable on `https://www.toptal.com/developers/hastebin/documentation`.
 
 
 ## 🚀 Running the bot
