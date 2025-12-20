@@ -13,7 +13,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 async def load_cogs():
     await bot.load_extension("cogs.on_startup")
-    print("Loading cog 'startup behaviour'...")
+    print("Loading cog 'Startup behaviour'...")
     await bot.load_extension("cogs.admin")
     print("Loading cog 'Admin'...")
     await bot.load_extension("cogs.meme")
@@ -24,6 +24,8 @@ async def load_cogs():
     print("Loading cog 'Music'...")
     await bot.load_extension("cogs.f1")
     print("Loading cog 'F1'...")
+    await bot.load_extension('cogs.other')
+    print("Loading cog 'Other'...")
 
 async def main():
     async with bot:

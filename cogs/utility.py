@@ -126,7 +126,7 @@ class Utility(commands.Cog):
             await interaction.response.send_message("It is a DM", ephemeral=True)
             print(f"{interaction.user.name} checked is it a DM or a guild and it is a DM")
 
-    @app_commands.command(name="ai", description="gemma3:270m")
+    @app_commands.command(name="ai", description="AI that will (maybe) respond to your questions.")
     @app_commands.describe(prompt="Message to the AI")
     @app_commands.choices(model=[
         app_commands.Choice(name="gemma3:1b", value="gemma3:1b"),
