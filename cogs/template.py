@@ -17,6 +17,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
+
 class ExampleCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -25,6 +26,7 @@ class ExampleCog(commands.Cog):
     async def test(interaction: discord.Interaction):
         """Example command."""
         await interaction.response.send_message('Lorem ipsum dolor sit amet.')
+
 
 async def setup(bot):
     await bot.add_cog(ExampleCog(bot))

@@ -39,5 +39,6 @@ class SyncCog(commands.Cog):
         await asyncio.sleep(2)
         await self.bot.change_presence(activity=None, status=discord.Status.dnd)
 
+
 async def setup(bot):
     await bot.add_cog(SyncCog(bot))

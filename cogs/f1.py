@@ -64,6 +64,7 @@ async def find_circuit(season, roundnumber):
     else:
         return None
 
+
 async def did_exist(season, roundnumber):
     """Checks did an F1 race exist or not."""
     schedule = await asyncio.to_thread(fastf1.get_event_schedule, season)
@@ -72,6 +73,7 @@ async def did_exist(season, roundnumber):
         return None
     else:
         return True
+
 
 class F1Commands(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -82,23 +84,29 @@ class F1Commands(commands.Cog):
     async def f1_result(self, interaction: discord.Interaction, season: app_commands.Range[int, 1950, CURRENT_YEAR], roundnumber: app_commands.Range[int, 1, 24]): # Remember to change if F1 introduces an F1 calendar with more than 24 rounds.
         """Gives the result of an F1 race asked for."""
         await interaction.response.defer()
+
         global status_map
         if_existed = await did_exist(season, roundnumber)
+
         if not if_existed:
             await interaction.followup.send(f"There wasn't {roundnumber} round in {season}.")
             return
+
         session = await asyncio.to_thread(fastf1.get_session, season, roundnumber, 'R')
         await asyncio.to_thread(session.load, telemetry=False, weather=False)
+
         results = session.results
         results1 = results.head(1000)
 
         result = []
+
         for _, row in results1.iterrows():
             pos = int(row['Position'])
             driver = row['FullName']
             team = row['TeamName']
             status = row['Status']
             label = status_map.get(status, status)
+
             if status == "Finished":
                 result.append(f"{pos}. {driver} ({team})")
             else:
@@ -106,8 +114,10 @@ class F1Commands(commands.Cog):
                     result.append(f"{pos}. {driver} ({team}) - {label}")
                 else:
                     result.append(f"{pos}. {driver} ({team})")
+
         circuit = await find_circuit(season, roundnumber)
         output = "\n".join(result)
+
         responseF1 = discord.Embed(
             title=f"F1 {season} {circuit}",
             description=output,
@@ -121,7 +131,9 @@ class F1Commands(commands.Cog):
         """Gives the calendar for asked F1 season."""
         await interaction.response.defer(ephemeral=True)
         schedule = await asyncio.to_thread(fastf1.get_event_schedule, season)
+
         lines = []
+
         for _, row in schedule.iterrows():
             location = row['EventName']
             roundnumber = row['RoundNumber']
@@ -137,7 +149,9 @@ class F1Commands(commands.Cog):
                 lines.append(f'{location} - {date}')
             else:
                 lines.append(f'{roundnumber}. {location} - {date}')
+
         output = "\n".join(lines)
+
         F1Calendar = discord.Embed(
             title=f"F1 {season} calendar",
             description=output,
@@ -154,10 +168,13 @@ class F1Commands(commands.Cog):
         driver_code = driver_code.upper()
         schedule = await asyncio.to_thread(fastf1.get_event_schedule, season)
         races = schedule[schedule['EventFormat'] != 'testing']
+
         results_list = []
+
         for _, race in races.iterrows():
             round_num = race['RoundNumber']
             race_name = race['EventName']
+
             try:
                 session = await asyncio.to_thread(fastf1.get_session, season, round_num, 'R')
                 await asyncio.to_thread(session.load, laps=False, telemetry=False, weather=False, messages=False)
@@ -171,16 +188,20 @@ class F1Commands(commands.Cog):
                     results_list.append(f"R{round_num}: {race_name} - No Data/DNS")
             except Exception:
                 continue
+
         if not results_list:
             await interaction.followup.send(f"Could not find any results for driver '{driver_code}' in {season}.")
             return
+
         output = "\n".join(results_list)
+
         F1Driver = discord.Embed(
             title=f"F1 Season Results: {driver_code} ({season})",
             description=output,
             color=discord.Color.red()
         )
         await interaction.followup.send(embed=F1Driver)
+
 
 async def setup(bot):
     await bot.add_cog(F1Commands(bot))

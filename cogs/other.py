@@ -17,6 +17,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
+
 class other(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -55,6 +56,7 @@ class other(commands.Cog):
         view = discord.ui.View()
         view.add_item(discord.ui.Button(label="View Source Code", url="https://github.com/hakergeniusz/discord-bot"))
         await interaction.response.send_message(embed=embed, view=view)
+
 
 async def setup(bot):
     await bot.add_cog(other(bot))

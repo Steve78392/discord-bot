@@ -25,9 +25,12 @@ def create_file(id: int):
     """Creates a file for change_file()."""
     if not id:
         return
+
     path = 'tmp/howmanytimes/'
+
     if os.path.exists(f'{path}{id}.txt'):
         return
+
     with open(f'{path}{id}.txt','w') as f:
         f.write('0')
 
@@ -35,13 +38,17 @@ def create_file(id: int):
 def change_file(id: int):
     """Made for /howmanytimes to work. Adds 1 to a file and returns the new number and returns the new count."""
     path = 'tmp/howmanytimes/'
+
     if not os.path.exists(f'{path}{id}.txt'):
         create_file(id)
+
     with open(f'{path}{id}.txt', 'r') as f:
         count = int(f.read())
+
     with open(f'{path}{id}.txt', 'w') as f:
         f.write(f'{count + 1}')
         return count + 1
+
 
 class Meme(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -59,12 +66,14 @@ class Meme(commands.Cog):
             await interaction.response.send_message(f"<@{interaction.user.id}>, you cannot beep while I am already beeping. Please try again later.", ephemeral=True)
             print(f"An idiot named {interaction.user.name} wanted to beep when I already beeped")
             return
+
         if times == 1:
             await interaction.response.send_message(f"<@{interaction.user.id}>, I will beep once in the computer.", ephemeral=True)
             print(f"An idiot named {interaction.user.name} wants to beep once.")
             process = await asyncio.create_subprocess_shell('beep')
             await process.communicate()
             return
+
         if beep_delay:
             if beep_delay < 1:
                 await interaction.response.send_message(f"<@{interaction.user.id}>, I will beep {times} times with the delay between of them of {beep_delay} seconds in the computer.", ephemeral=True)
@@ -75,7 +84,9 @@ class Meme(commands.Cog):
         else:
             await interaction.response.send_message(f"<@{interaction.user.id}>, I will beep {times} times in the computer.", ephemeral=True)
         print(f"An idiot named {interaction.user.name} wants to beep {times} times with {beep_delay} second(s) delay between them ")
+
         beeping = 1
+
         for i in range(times):
             process = await asyncio.create_subprocess_shell('beep')
             await process.communicate()
@@ -94,7 +105,9 @@ class Meme(commands.Cog):
         """Says how many times this user typed this command."""
         if not os.path.exists(f'tmp/howmanytimes/{interaction.user.id}.txt'):
             await asyncio.to_thread(create_file, interaction.user.id)
+
         count = await asyncio.to_thread(change_file, interaction.user.id)
+
         if count == 1:
             await interaction.response.send_message(f'You have used this command {count} time.')
             return
@@ -121,9 +134,12 @@ class Meme(commands.Cog):
         """Rickrolls the user that typed this command."""
         await interaction.response.send_message('Not this time.')
         await asyncio.sleep(3)
+
         await interaction.followup.send('But maybe?')
         await asyncio.sleep(3)
+
         await interaction.followup.send('https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713')
+
 
 async def setup(bot):
     await bot.add_cog(Meme(bot))

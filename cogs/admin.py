@@ -30,6 +30,7 @@ def admin_check():
         return False
     return app_commands.check(predicate)
 
+
 class StatusButtons(discord.ui.View):
     """A cog for /change_status to work."""
     def __init__(self, bot):
@@ -76,9 +77,7 @@ class ownerCommands(commands.Cog):
     @admin_check()
     @app_commands.command(name="purge", description="Removes messages in a chat.", )
     @app_commands.default_permissions(manage_messages=True)
-    @app_commands.describe(
-        range="How many messages you want to delete (max: 100)"
-    )
+    @app_commands.describe(range="How many messages you want to delete (max: 100)")
     @app_commands.guild_only()
     async def purge(self, interaction: discord.Interaction, range: app_commands.Range[int, 1, 100]):
         """Removes messages in a chat."""
@@ -86,12 +85,15 @@ class ownerCommands(commands.Cog):
         if not bot_perms:
             await interaction.response.send_message("I don't have necessary permissions to do that.")
             return
+
         chan = interaction.channel
         if range == 1:
             await interaction.response.send_message(f"Deleting {range} message...", ephemeral=True)
         else:
             await interaction.response.send_message(f"Deleting {range} messages...", ephemeral=True)
+
         await chan.purge(limit=range)
+
         if range == 1:
             await interaction.edit_original_response(content=f'Deleted {range} message successfully.')
             print(f"Deleted {range} message in {interaction.channel.name}")
@@ -133,6 +135,7 @@ class ownerCommands(commands.Cog):
                     await interaction.response.send_message('Removed webhook successfully')
                 else:
                     await interaction.response.send_message(f'Webhook may not have been deleted. Response code is {response.status}.')
+
 
 async def setup(bot):
     await bot.add_cog(ownerCommands(bot))

@@ -91,6 +91,7 @@ class Utility(commands.Cog):
     async def webhook(self, interaction: discord.Interaction, webhook: str, message: str, name: str = None, avatar_url: str = None):
         """Sends a message through the webhook and avatar/webhook name optionally."""
         await interaction.response.defer()
+
         async with aiohttp.ClientSession() as session:
             async with session.get(webhook) as response:
                 if response.status == 401:
@@ -110,10 +111,12 @@ class Utility(commands.Cog):
                 "username": name,
                 "avatar_url": avatar_url
             }
+
             async with session.post(webhook, json=data) as response:
                 if response.status == 429:
                     await interaction.followup.send("Rate-limit has been hit. Message hasn't been sent.", ephemeral=True)
                     print(f"Failed to send a message to '{webhook}' of contents '{message}' because of rate limits")
+
                 if response.status == 204:
                     await interaction.followup.send("Message sent successfully.", ephemeral=True)
                     print(f"Sent '{message}' to webhook '{webhook}'")
@@ -121,7 +124,7 @@ class Utility(commands.Cog):
     @app_commands.command(name="say", description="Send a message to a channel")
     @app_commands.describe(
         message="Message to send",
-        reason="Reason why you want to send it", # lol
+        reason="Reason why you want to send it",
         delete_after="How many seconds after sending should it be deleted.",
     )
     @app_commands.guild_only()
@@ -129,13 +132,17 @@ class Utility(commands.Cog):
         """Says something on a channel."""
         channel = await self.bot.fetch_channel(interaction.channel_id)
         wiadomosc = await channel.send(message)
+
         if interaction.guild:
             print(f"""On "{channel.name}" sent message: "{message}". User: {interaction.user.name}. """)
         else:
             print(f"""On DM sent message: "{message}". User: {interaction.user.name}. """)
+
         if reason:
             print(f"""Reason: "{reason}". """)
+
         await interaction.response.send_message(f"Message sent to <#{interaction.channel_id}>", ephemeral=True)
+
         if delete_after:
             await asyncio.sleep(delete_after)
             await wiadomosc.delete()
@@ -148,9 +155,9 @@ class Utility(commands.Cog):
         if interaction.guild:
             await interaction.response.send_message("It is a server", ephemeral=True)
             print(f"{interaction.user.name} checked is it a DM or a guild and it is a guild")
-        else:
-            await interaction.response.send_message("It is a DM", ephemeral=True)
-            print(f"{interaction.user.name} checked is it a DM or a guild and it is a DM")
+            return
+        await interaction.response.send_message("It is a DM", ephemeral=True)
+        print(f"{interaction.user.name} checked is it a DM or a guild and it is a DM")
 
     @app_commands.command(name="ai", description="AI that will (maybe) respond to your questions.")
     @app_commands.describe(prompt="Message to the AI")
@@ -164,30 +171,38 @@ class Utility(commands.Cog):
         await interaction.response.defer()
         print(f'{interaction.user.name} says: {prompt}')
         print(f'Using model: {model.value}')
+
         message = await interaction.followup.send('Loading model...')
         full_response = ""
         counter_ai = 0
+
         async for chunk in process_prompt(prompt, model.value):
             full_response += chunk
             counter_ai += 1
+
             if len(full_response) <= 1900:
                 if counter_ai % 10 == 0:
                     await message.edit(content=full_response + '▌')
             else:
                 if len(full_response) <= 1912:
                     await message.edit(content='Response is too long to send it on Discord. Soon, file with full response will be provided.')
+
         if len(full_response) <= 1900:
             await message.edit(content=full_response)
             return
+
         file_name = os.path.join("tmp", f"{random.randint(100000, 999999)}.txt")
         await create_file(file_name=file_name, file_content=full_response)
         await asyncio.sleep(0.05)
+
         if not os.path.exists(file_name):
             await message.edit(content='Response is too long to send it on Discord. Error while making a file with full response.')
             return
+
         await message.delete()
         file = discord.File(f'{file_name}')
         await interaction.followup.send(content='Here is the file with the full response:',file=file)
+
         if os.path.exists(file_name):
             os.remove(file_name)
 
@@ -198,15 +213,20 @@ class Utility(commands.Cog):
         if interaction.user.id != OWNER_ID:
             await interaction.response.send_message('You are not permitted to do that.')
             return
+
         await interaction.response.defer()
         server = interaction.guild
         chan = await server.create_text_channel('test')
         mes = await interaction.followup.send(f'<#{chan.id}>')
+
         tasks = []
+
         for _ in range(5):
             tasks.append(chan.send(f'<@{interaction.user.id}>'))
+
         await asyncio.gather(*tasks, return_exceptions=True)
         await asyncio.sleep(3)
+
         await chan.delete()
         await mes.delete()
 
@@ -224,6 +244,7 @@ class Utility(commands.Cog):
     async def on_message(self, message: discord.Message):
         """Sends info when a message has been sent."""
         print(f'{message.author.name} said: {message.content}')
+
 
 async def setup(bot):
     await bot.add_cog(Utility(bot))
