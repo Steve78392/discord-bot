@@ -21,8 +21,10 @@ from ollama import AsyncClient
 import os
 import aiohttp
 import random
+from dotenv import load_dotenv
 
-OWNER_ID = int(os.environ['DISCORD_OWNER_ID'])
+load_dotenv()
+OWNER_ID = int(os.environ.get('DISCORD_OWNER_ID'))
 
 SYSTEM_PROMPT = """
 You are a chatbot for a Discord command (don't mention this in responses).

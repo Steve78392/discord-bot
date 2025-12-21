@@ -18,8 +18,10 @@ from discord.ext import commands
 from discord import app_commands
 import os
 import aiohttp
+from dotenv import load_dotenv
 
-OWNER_ID = int(os.environ['DISCORD_OWNER_ID'])
+load_dotenv()
+OWNER_ID = int(os.environ.get('DISCORD_OWNER_ID'))
 
 def admin_check():
     """Check is the command written by unauthorized user."""
