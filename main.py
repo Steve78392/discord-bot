@@ -26,6 +26,10 @@ intents.voice_states = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+async def stop_bot():
+    """Stops the bot."""
+    await bot.close()
+
 async def load_cogs():
     """Loads all extensions (cogs)."""
     await bot.load_extension("cogs.on_startup")
@@ -53,3 +57,4 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print('Shutting down the bot...')
+        asyncio.run(stop_bot())
