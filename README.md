@@ -13,7 +13,7 @@ Feature-rich Discord bot made by hakergeniusz with the goal of learning Discord.
 ## ⚙️ Prerequisites
 You must have following installed on your computer for this bot to work correctly:
 * A **Discord bot token** from Discord Developer Program.
-* **Python 3.10+**
+* **Python 3.12+**
 * **Ollama** installed on your system with the following language models:
   * `gemma3:1b`
   * `gemma3:4b`
